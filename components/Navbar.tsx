@@ -8,10 +8,17 @@ import { UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "./theme-toggle";
 import MobileSidebar from "@/components/MobileSidebar";
+import { useRouter } from "next/navigation";
 
 const font = Poppins({ weight: "600", subsets: ["latin"] });
 
-const Navbar = () => {
+interface NavbarProps {
+    user?: boolean;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ user }) => {
+    const router = useRouter();
+
     return (
         <div className="fixed w-full z-50 flex justify-between items-center py-2 px-4 border-b border-primary/10 bg-secondary  h-16">
             <div className="flex items-center">
@@ -28,6 +35,20 @@ const Navbar = () => {
                 </Button>
                 <ModeToggle />
                 <UserButton />
+                {!user && (
+                    <>
+                        <Link href="/sign-in">
+                            <Button variant={"secondary"} size="sm">
+                                Sign <In></In>
+                            </Button>
+                        </Link>
+                        <Link href="/sign-up">
+                            <Button variant={"secondary"} size="sm">
+                                Sign Up
+                            </Button>
+                        </Link>
+                    </>
+                )}
             </div>
         </div>
     );
