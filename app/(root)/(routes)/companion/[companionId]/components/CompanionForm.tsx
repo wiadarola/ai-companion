@@ -16,11 +16,11 @@ import { Wand2 } from "lucide-react";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { currentUser } from "@clerk/nextjs";
 
 interface CompanionFormProps {
     initialData: Companion | null;
     categories: Category[];
+    userId: string | undefined;
 }
 
 const formSchema = z.object({
@@ -51,7 +51,7 @@ Albert: *with a twinkle in his eye* Just pondering the mysteries of the universe
 Human: Sure, but not as profound as your insights!
 Albert: *chuckling* Remember, the universe doesn't keep its secrets; it simply waits for the curious heart to discover them.`;
 
-const CompanionForm: React.FunctionComponent<CompanionFormProps> = async ({ categories, initialData }) => {
+const CompanionForm: React.FunctionComponent<CompanionFormProps> = ({ categories, initialData, userId }) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || { name: "", description: "", instructions: "", seed: "", src: "", categoryId: undefined }
@@ -60,12 +60,11 @@ const CompanionForm: React.FunctionComponent<CompanionFormProps> = async ({ cate
     const { toast } = useToast();
     const router = useRouter();
     const isLoading = form.formState.isSubmitting;
-    const user = await currentUser();
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             if (initialData) {
-                if (user?.id === initialData.userId) {
+                if (userId !== initialData.userId) {
                     toast({ variant: "destructive", description: "You are not the owner of this companion." });
                     return;
                 }

@@ -1,5 +1,6 @@
 import prismadb from "@/lib/prismadb";
 import CompanionForm from "./components/CompanionForm";
+import { currentUser } from "@clerk/nextjs";
 
 interface ComapnionIdPageProps {
     params: {
@@ -9,6 +10,7 @@ interface ComapnionIdPageProps {
 
 const ComapnionIdPage: React.FC<ComapnionIdPageProps> = async ({ params }) => {
     // TODO: Check subscription
+    const user = await currentUser();
 
     const companion = await prismadb.companion.findUnique({
         where: {
@@ -20,7 +22,7 @@ const ComapnionIdPage: React.FC<ComapnionIdPageProps> = async ({ params }) => {
 
     return (
         <div>
-            <CompanionForm initialData={companion} categories={categories} />
+            <CompanionForm initialData={companion} categories={categories} userId={user?.id} />
         </div>
     );
 }
