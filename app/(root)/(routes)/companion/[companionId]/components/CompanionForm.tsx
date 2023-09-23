@@ -16,6 +16,7 @@ import { Wand2 } from "lucide-react";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { currentUser } from "@clerk/nextjs";
 
 interface CompanionFormProps {
     initialData: Companion | null;
@@ -50,7 +51,7 @@ Albert: *with a twinkle in his eye* Just pondering the mysteries of the universe
 Human: Sure, but not as profound as your insights!
 Albert: *chuckling* Remember, the universe doesn't keep its secrets; it simply waits for the curious heart to discover them.`;
 
-const CompanionForm: React.FunctionComponent<CompanionFormProps> = ({ categories, initialData }) => {
+const CompanionForm: React.FunctionComponent<CompanionFormProps> = async ({ categories, initialData }) => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || { name: "", description: "", instructions: "", seed: "", src: "", categoryId: undefined }
@@ -59,10 +60,15 @@ const CompanionForm: React.FunctionComponent<CompanionFormProps> = ({ categories
     const { toast } = useToast();
     const router = useRouter();
     const isLoading = form.formState.isSubmitting;
+    const user = await currentUser();
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             if (initialData) {
+                if (user?.id === initialData.userId) {
+                    toast({ variant: "destructive", description: "You are not the owner of this companion." });
+                    return;
+                }
                 // Update Companion
                 await axios.patch(`/api/companion/${initialData.id}`, values);
             } else {
@@ -70,11 +76,11 @@ const CompanionForm: React.FunctionComponent<CompanionFormProps> = ({ categories
                 await axios.post("/api/companion", values);
             }
 
-            toast({ description: "Companion saved successfully" });
+            toast({ description: "Companion saved successfully." });
             router.refresh(); // Reloads server components to refresh data
             router.push("/");
         } catch (error) {
-            toast({ variant: "destructive", description: "Something went wrong" });
+            toast({ variant: "destructive", description: "Something went wrong." });
         }
     };
 
@@ -82,7 +88,7 @@ const CompanionForm: React.FunctionComponent<CompanionFormProps> = ({ categories
         <div className="h-full p-4 space-y-2 max-w-3xl mx-auto">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pb-10">
-                    <div className="space-y-2 w-full">~
+                    <div className="space-y-2 w-full">
                         <div>
                             <h3 className="text-lg font-medium">
                                 General Information
