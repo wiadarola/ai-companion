@@ -29,17 +29,17 @@ const Navbar: React.FC<NavbarProps> = ({ user }) => {
                 </h1>
             </div>
             <div className="flex items-center gap-x-3">
-                <Button variant={"premium"} size="sm" className="gap-x-1">
+                {/* <Button variant={"premium"} size="sm" className="gap-x-1">
                     Upgrade
                     <Sparkles className="h-4 w-4 fill-white text-white" size={18} />
-                </Button>
+                </Button> */}
                 <ModeToggle />
                 <UserButton />
                 {!user && (
                     <>
                         <Link href="/sign-in">
                             <Button variant={"secondary"} size="sm">
-                                Sign <In></In>
+                                Sign In
                             </Button>
                         </Link>
                         <Link href="/sign-up">
