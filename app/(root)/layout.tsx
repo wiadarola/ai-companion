@@ -1,12 +1,11 @@
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import { currentUser } from "@clerk/nextjs";
+import React from "react";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
-    const user = currentUser();
     return (
         <div className="h-full">
-            <Navbar user={user !== null} />
+            <Navbar />
             <div className="hidden md:flex mt-16 w-20 flex-col fixed inset-y-0">
                 <Sidebar />
             </div>
