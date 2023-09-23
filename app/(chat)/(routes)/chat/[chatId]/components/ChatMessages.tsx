@@ -32,7 +32,7 @@ const ChatMessages: React.FunctionComponent<ChatMessagesProps> = ({ isLoading, m
     return (
         <div className="flex-1 overflow-y-auto">
             <ChatMessage isLoading={fakeLoading} src={companion.src} role="system" content={`Hello, I am ${companion.name}, ${companion.description}.`} />
-            {userId && messages.map((message) => <ChatMessage key={message.content} role={message.role} content={message.content} src={message.src} />)}
+            {userId && messages.map((message) => <ChatMessage key={message.content} role={message.role} content={message.content} src={companion.src} />)}
             {userId && isLoading && <ChatMessage isLoading={isLoading} role="system" src={companion.src} />}
             <div ref={scrollRef} />
         </div>
