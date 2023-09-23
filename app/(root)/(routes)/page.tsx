@@ -18,7 +18,7 @@ const RootPage: React.FC<RootPageProps> = async ({ searchParams }) => {
         where: {
             categoryId: searchParams.categoryId,
             name: {
-                search: searchParams.name,
+                contains: searchParams.name,
             },
             userId: "user_2VlkYg7lPaUBaG0ZxFwcv6orhuL" || user?.id,
         },
