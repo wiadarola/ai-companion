@@ -43,9 +43,9 @@ const ChatIdPage: React.FunctionComponent<ChatIdPageProps> = async ({ params }) 
     }
 
     return (
-        <div>
+        <>
             <ChatClient companion={companion} />
-        </div>
+        </>
     );
 }
 
