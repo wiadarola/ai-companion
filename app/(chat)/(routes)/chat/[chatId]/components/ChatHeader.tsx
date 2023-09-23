@@ -31,6 +31,9 @@ const ChatClient: React.FunctionComponent<ChatHeaderProps> = ({ companion }) => 
             toast({
                 description: "Companion deleted.",
             });
+
+            router.refresh();
+            router.push('/');
         } catch (error) {
             toast({
                 description: "Something went wrong.",

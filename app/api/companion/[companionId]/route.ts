@@ -58,6 +58,7 @@ export async function DELETE(req: Request, { params }: { params: { companionId: 
 
         await prismadb.companion.delete({
             where: {
+                userId: user.id,
                 id: params.companionId
             }
         });
