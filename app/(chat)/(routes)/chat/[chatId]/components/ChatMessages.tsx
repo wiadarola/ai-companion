@@ -3,6 +3,7 @@ import ChatMessage from "./ChatMessage";
 import { ChatMessageProps } from "./ChatMessage";
 import { useState, useEffect, useRef } from "react";
 import { ElementRef } from "react";
+import { useAuth } from "@clerk/nextjs";
 
 interface ChatMessagesProps {
     isLoading: boolean;
@@ -12,7 +13,9 @@ interface ChatMessagesProps {
 
 const ChatMessages: React.FunctionComponent<ChatMessagesProps> = ({ isLoading, messages = [], companion }) => {
     const scrollRef = useRef<ElementRef<"div">>(null);
-    const [fakeLoading, setFakeLoading] = useState(messages.length === 0);
+    const { userId } = useAuth();
+    const [fakeLoading, setFakeLoading] = useState<boolean>(messages.length === 0 || !userId);
+
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -29,8 +32,8 @@ const ChatMessages: React.FunctionComponent<ChatMessagesProps> = ({ isLoading, m
     return (
         <div className="flex-1 overflow-y-auto">
             <ChatMessage isLoading={fakeLoading} src={companion.src} role="system" content={`Hello, I am ${companion.name}, ${companion.description}.`} />
-            {messages.map((message) => <ChatMessage key={message.content} role={message.role} content={message.content} src={message.src} />)}
-            {isLoading && <ChatMessage isLoading={isLoading} role="system" src={companion.src} />}
+            {userId && messages.map((message) => <ChatMessage key={message.content} role={message.role} content={message.content} src={message.src} />)}
+            {userId && isLoading && <ChatMessage isLoading={isLoading} role="system" src={companion.src} />}
             <div ref={scrollRef} />
         </div>
     );

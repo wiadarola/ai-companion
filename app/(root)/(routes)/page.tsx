@@ -20,7 +20,14 @@ const RootPage: React.FC<RootPageProps> = async ({ searchParams }) => {
             name: {
                 contains: searchParams.name,
             },
-            userId: "user_2VlkYg7lPaUBaG0ZxFwcv6orhuL" || user?.id,
+            OR: [
+                {
+                    userId: user?.id
+                },
+                {
+                    userId: "user_2VlkYg7lPaUBaG0ZxFwcv6orhuL"
+                }
+            ]
         },
         orderBy: {
             createdAt: "desc",

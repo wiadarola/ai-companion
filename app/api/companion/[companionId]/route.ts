@@ -12,7 +12,7 @@ export async function PATCH(req: Request, { params }: { params: { companionId: s
             return new NextResponse("Companion ID is required", { status: 400 });
         }
 
-        if (!user || !user.id || !user.firstName) {
+        if (!user || !user.id) {
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
@@ -28,7 +28,7 @@ export async function PATCH(req: Request, { params }: { params: { companionId: s
             data: {
                 categoryId,
                 userId: user.id,
-                userName: user.firstName,
+                userName: user.firstName || "You",
                 src,
                 name,
                 description,
